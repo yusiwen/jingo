@@ -1,57 +1,57 @@
-var router = require('express').Router()
-var app = require('../lib/app').getInstance()
-var _ = require('lodash')
-var passportLocal = require('passport-local')
-var passportGoogle = require('passport-google-oauth')
-var passportGithub = require('passport-github').Strategy
-var tools = require('../lib/tools')
+var router = require("express").Router()
+var app = require("../lib/app").getInstance()
+var _ = require("lodash")
+var passportLocal = require("passport-local")
+var passportGoogle = require("passport-google-oauth")
+var passportGithub = require("passport-github").Strategy
+var tools = require("../lib/tools")
 
-var auth = app.locals.config.get('authentication')
+var auth = app.locals.config.get("authentication")
 
 // Additional LDAP support only if needed
 var passportLDAP
 if (auth.ldap.enabled) {
-  passportLDAP = require('passport-ldapauth')
+  passportLDAP = require("passport-ldapauth")
 }
 
 var passport = app.locals.passport
 var proxyPath = app.locals.config.getProxyPath()
 var redirectURL
 
-router.get('/login', _getLogin)
-router.get('/logout', _getLogout)
-router.post('/login', passport.authenticate('local', {
-  successRedirect: proxyPath + '/auth/done',
-  failureRedirect: proxyPath + '/login',
+router.get("/login", _getLogin)
+router.get("/logout", _getLogout)
+router.post("/login", passport.authenticate("local", {
+  successRedirect: proxyPath + "/auth/done",
+  failureRedirect: proxyPath + "/login",
   failureFlash: true
 }))
-router.get('/auth/done', _getAuthDone)
+router.get("/auth/done", _getAuthDone)
 
-router.get('/auth/google', passport.authenticate('google', {
-  scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+router.get("/auth/google", passport.authenticate("google", {
+  scope: ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"]
 }))
 
-router.get('/oauth2callback', passport.authenticate('google', {
-  successRedirect: proxyPath + '/auth/done',
-  failureRedirect: proxyPath + '/login'
+router.get("/oauth2callback", passport.authenticate("google", {
+  successRedirect: proxyPath + "/auth/done",
+  failureRedirect: proxyPath + "/login"
 }))
 
-router.get('/auth/github', passport.authenticate('github'))
-router.get('/auth/github/callback', passport.authenticate('github', {
-  successRedirect: proxyPath + '/auth/done',
-  failureRedirect: proxyPath + '/login'
+router.get("/auth/github", passport.authenticate("github"))
+router.get("/auth/github/callback", passport.authenticate("github", {
+  successRedirect: proxyPath + "/auth/done",
+  failureRedirect: proxyPath + "/login"
 }))
 
 if (auth.ldap.enabled) {
-  router.post('/auth/ldap', passport.authenticate('ldapauth', {
-    successRedirect: proxyPath + '/auth/done',
-    failureRedirect: proxyPath + '/login',
+  router.post("/auth/ldap", passport.authenticate("ldapauth", {
+    successRedirect: proxyPath + "/auth/done",
+    failureRedirect: proxyPath + "/login",
     failureFlash: true
   }))
 }
 
 if (auth.google.enabled) {
-  redirectURL = auth.google.redirectURL || app.locals.baseUrl + '/oauth2callback'
+  redirectURL = auth.google.redirectURL || app.locals.baseUrl + "/oauth2callback"
   passport.use(new passportGoogle.OAuth2Strategy({
     clientID: auth.google.clientId,
     clientSecret: auth.google.clientSecret,
@@ -61,14 +61,14 @@ if (auth.google.enabled) {
   },
 
     function (accessToken, refreshToken, profile, done) {
-      usedAuthentication('google')
+      usedAuthentication("google")
       done(null, profile)
     }
   ))
 }
 
 if (auth.github.enabled) {
-  redirectURL = auth.github.redirectURL || app.locals.baseUrl + '/auth/github/callback'
+  redirectURL = auth.github.redirectURL || app.locals.baseUrl + "/auth/github/callback"
 
   // Register a new Application with Github https://github.com/settings/applications/new
   // Authorization callback URL /auth/github/callback
@@ -78,7 +78,7 @@ if (auth.github.enabled) {
     callbackURL: redirectURL
   },
     function (accessToken, refreshToken, profile, done) {
-      usedAuthentication('github')
+      usedAuthentication("github")
       done(null, profile)
     }
   ))
@@ -96,7 +96,7 @@ if (auth.ldap.enabled) {
     }
   },
     function (profile, done) {
-      usedAuthentication('ldap')
+      usedAuthentication("ldap")
       done(null, profile)
     }
   ))
@@ -108,14 +108,14 @@ if (auth.alone.enabled) {
     function (username, password, done) {
       var user = {
         displayName: auth.alone.username,
-        email: auth.alone.email || ''
+        email: auth.alone.email || ""
       }
 
       if (username.toLowerCase() !== auth.alone.username.toLowerCase() || tools.hashify(password) !== auth.alone.passwordHash) {
-        return done(null, false, { message: 'Incorrect username or password' })
+        return done(null, false, { message: "Incorrect username or password" })
       }
 
-      usedAuthentication('alone')
+      usedAuthentication("alone")
 
       return done(null, user)
     }
@@ -135,20 +135,20 @@ if (auth.local.enabled) {
       })
 
       if (!foundUser) {
-        return done(null, false, { message: 'Incorrect username or password' })
+        return done(null, false, { message: "Incorrect username or password" })
       }
 
-      usedAuthentication('local')
+      usedAuthentication("local")
 
       return done(null, {
         displayName: foundUser.username,
-        email: foundUser.email || ''
+        email: foundUser.email || ""
       })
     }
   ))
 }
 
-function usedAuthentication (name) {
+function usedAuthentication(name) {
   for (var a in auth) {
     if (auth.hasOwnProperty(a)) {
       auth[a].used = (a === name)
@@ -181,52 +181,53 @@ passport.deserializeUser(function (user, done) {
   }
 
   if (!user.email) {
-    user.email = 'jingouser'
+    user.email = "jingouser"
   }
 
-  user.asGitAuthor = user.displayName + ' <' + user.email + '>'
+  user.asGitAuthor = user.displayName + " <" + user.email + ">"
   done(undefined, user)
 })
 
-function _getLogout (req, res) {
+function _getLogout(req, res) {
   req.logout()
   req.session = null
-  res.redirect(proxyPath + '/')
+  res.redirect(proxyPath + "/")
 }
 
-function _getAuthDone (req, res) {
+function _getAuthDone(req, res) {
   if (!res.locals.user) {
-    res.redirect(proxyPath + '/')
+    res.redirect(proxyPath + "/")
     return
   }
 
   if (!auth.alone.used &&
       !auth.local.used &&
       !tools.isAuthorized(res.locals.user.email,
-                          app.locals.config.get('authorization').validMatches,
-                          app.locals.config.get('authorization').emptyEmailMatches)) {
+                          app.locals.config.get("authorization").validMatches,
+                          app.locals.config.get("authorization").emptyEmailMatches)) {
     req.logout()
     req.session = null
     res.statusCode = 403
-    res.end('<h1>Forbidden</h1>')
-  } else {
-    var dst = req.session.destination || proxyPath + '/'
+    res.end("<h1>Forbidden</h1>")
+  }
+  else {
+    var dst = req.session.destination || proxyPath + "/"
     delete req.session.destination
     res.redirect(dst)
   }
 }
 
-function _getLogin (req, res) {
+function _getLogin(req, res) {
   req.session.destination = req.query.destination
 
-  if (req.session.destination === '/login') {
-    req.session.destination = '/'
+  if (req.session.destination === "/login") {
+    req.session.destination = "/"
   }
 
   res.locals.errors = req.flash()
 
-  res.render('login', {
-    title: app.locals.config.get('application').title,
+  res.render("login", {
+    title: app.locals.config.get("application").title,
     auth: auth
   })
 }

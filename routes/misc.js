@@ -1,26 +1,26 @@
 /* global Git */
-var router = require('express').Router()
-var renderer = require('../lib/renderer')
-var fs = require('fs')
-var models = require('../lib/models')
+var router = require("express").Router()
+var renderer = require("../lib/renderer")
+var fs = require("fs")
+var models = require("../lib/models")
 
 models.use(Git)
 
-router.get('/misc/syntax-reference', _getSyntaxReference)
-router.post('/misc/preview', _postPreview)
-router.get('/misc/existence', _getExistence)
+router.get("/misc/syntax-reference", _getSyntaxReference)
+router.post("/misc/preview", _postPreview)
+router.get("/misc/existence", _getExistence)
 
-function _getSyntaxReference (req, res) {
-  res.render('syntax')
+function _getSyntaxReference(req, res) {
+  res.render("syntax")
 }
 
-function _postPreview (req, res) {
-  res.render('preview', {
+function _postPreview(req, res) {
+  res.render("preview", {
     content: renderer.render(req.body.data)
   })
 }
 
-function _getExistence (req, res) {
+function _getExistence(req, res) {
   if (!req.query.data) {
     res.send(JSON.stringify({data: []}))
     return
@@ -43,10 +43,10 @@ function _getExistence (req, res) {
   })
 }
 
-router.all('*', function (req, res) {
-  res.locals.title = '404 - Not found'
+router.all("*", function (req, res) {
+  res.locals.title = "404 - Not found"
   res.statusCode = 404
-  res.render('404.jade')
+  res.render("404.jade")
 })
 
 module.exports = router

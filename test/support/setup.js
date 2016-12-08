@@ -1,10 +1,10 @@
-global.sinon = require('sinon')
-global.chai = require('chai')
-global.expect = chai.expect
+global.sinon = require("sinon")
+global.chai = require("chai")
+global.expect = global.chai.expect
 
 global.Git = {
 
-  _content: '',
+  _content: "",
 
   absPath: function (file) {
     return file

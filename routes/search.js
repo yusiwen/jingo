@@ -1,24 +1,25 @@
 /* global Git */
 
-var router = require('express').Router()
-var path = require('path')
-var corsEnabler = require('../lib/cors-enabler')
-var models = require('../lib/models')
+var router = require("express").Router()
+var path = require("path")
+var corsEnabler = require("../lib/cors-enabler")
+var models = require("../lib/models")
 
 models.use(Git)
 
-router.options('/search', corsEnabler)
-router.get('/search', corsEnabler, _getSearch)
+router.options("/search", corsEnabler)
+router.get("/search", corsEnabler, _getSearch)
 
-function _getSearch (req, res) {
+function _getSearch(req, res) {
   var record
 
   res.locals.matches = []
 
   if (req.query.term) {
     res.locals.term = req.query.term.trim()
-  } else {
-    res.locals.term = ''
+  }
+  else {
+    res.locals.term = ""
   }
 
   if (res.locals.term.length === 0) {
@@ -27,25 +28,27 @@ function _getSearch (req, res) {
   }
 
   if (res.locals.term.length < 2) {
-    res.locals.warning = 'Search string is too short.'
+    res.locals.warning = "Search string is too short."
     renderResults()
-  } else {
+  }
+  else {
     try {
       new RegExp(res.locals.term) // eslint-disable-line no-new
-    } catch (e) {
-      res.locals.warning = 'The format of the search string is invalid.'
+    }
+    catch (e) {
+      res.locals.warning = "The format of the search string is invalid."
       renderResults()
       return
     }
 
     models.pages.findStringAsync(res.locals.term).then(function (items) {
       items.forEach(function (item) {
-        if (item.trim() !== '') {
-          record = item.split(':')
+        if (item.trim() !== "") {
+          record = item.split(":")
           res.locals.matches.push({
-            pageName: path.basename(record[0].split('.')[0]),
-            line: record[1] ? ':' + record[1] : '',
-            text: record.slice(2).join('')
+            pageName: path.basename(record[0].split(".")[0]),
+            line: record[1] ? ":" + record[1] : "",
+            text: record.slice(2).join("")
           })
         }
       })
@@ -54,9 +57,9 @@ function _getSearch (req, res) {
     })
   }
 
-  function renderResults () {
-    res.render('search', {
-      title: 'Search results'
+  function renderResults() {
+    res.render("search", {
+      title: "Search results"
     })
   }
 }
