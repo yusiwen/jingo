@@ -27,8 +27,10 @@
         "spaced-comment": [2, "always", {
             "exceptions": ["-"]
         }],
-        "wrap-iife": 2
+        "wrap-iife": 2,
+        "semi": [1, "always"]
     },
+
     "globals": {
         "process": true,
         "require": true,
