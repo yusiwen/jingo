@@ -1,16 +1,16 @@
-extends layout
+extends layout.pug
 
-include mixins/form
+include mixins/form.pug
 
 block tools
-  mixin tools('show', page.wikiname)
+  +tools('show', page.wikiname)
 
 block content
 
   if !isAjax
     #content.show
-      mixin notice()
-      mixin warning()
+      +notice()
+      +warning()
       !=content
   else
     .jingo-content.jingo-show

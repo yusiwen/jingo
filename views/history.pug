@@ -1,9 +1,9 @@
-extends layout
+extends layout.pug
 
-include mixins/form
+include mixins/form.pug
 
 block tools
-  mixin tools('history')
+  +tools('history')
 
 block content
   #content.show
