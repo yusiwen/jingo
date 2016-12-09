@@ -35,7 +35,7 @@ function _getHistory(req, res) {
     else {
       res.locals.title = "404 - Not found";
       res.statusCode = 404;
-      res.render("404.jade");
+      res.render("404.pug");
     }
   });
 }
@@ -108,7 +108,7 @@ function _getWikiPage(req, res) {
         else {
           res.locals.title = "404 - Not found";
           res.statusCode = 404;
-          res.render("404.jade");
+          res.render("404.pug");
           return;
         }
       }
@@ -148,7 +148,7 @@ function _getCompare(req, res) {
     else {
       res.locals.title = "404 - Not found";
       res.statusCode = 404;
-      res.render("404.jade");
+      res.render("404.pug");
       return;
     }
   });

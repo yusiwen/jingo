@@ -125,7 +125,7 @@ function _postPages(req, res) {
     res.locals.title = "500 - Internal server error";
     res.statusCode = 500;
     console.log(err);
-    res.render("500.jade", {
+    res.render("500.pug", {
       message: "Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jingo, please file a detailed report about what you were doing here: https://github.com/claudioc/jingo/issues . Thank you!",
       error: err
     });
@@ -201,7 +201,7 @@ function _putPages(req, res) {
       res.locals.title = "500 - Internal server error";
       res.statusCode = 500;
       console.log(err);
-      res.render("500.jade", {
+      res.render("500.pug", {
         message: "Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jingo, please file a detailed report about what you were doing here: https://github.com/claudioc/jingo/issues . Thank you!",
         error: err
       });
@@ -273,7 +273,7 @@ function _getRevert(req, res) {
     else {
       res.locals.title = "500 - Internal Server Error";
       res.statusCode = 500;
-      res.render("500.jade");
+      res.render("500.pug");
       return;
     }
   });
