@@ -1,7 +1,7 @@
-extends layout
+extends layout.pug
 
-include mixins/form
-include mixins/links
+include mixins/form.pug
+include mixins/links.pug
 
 block content
 
@@ -26,7 +26,7 @@ block content
       p
         h4 Authenticate ldap
 
-      mixin errors()
+      +errors()
 
       form.form-horizontal(action='#{proxyPath}/auth/ldap', method='post')
 
@@ -51,7 +51,7 @@ block content
       p
         h4 Authenticate locally
 
-      mixin errors()
+      +errors()
 
       form.form-horizontal(action='#{proxyPath}/login', method='post')
 

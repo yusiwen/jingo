@@ -1,14 +1,14 @@
-extends layout
+extends layout.pug
 
-include mixins/form
-include mixins/links
+include mixins/form.pug
+include mixins/links.pug
 
 block content
 
   if !isAjax
     #content.search.show
 
-      mixin warning()
+      +warning()
 
       if canSearch()
         form(action="#{proxyPath}/search").search-form

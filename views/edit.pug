@@ -1,18 +1,18 @@
-extends layout
+extends layout.pug
 
-include mixins/form
+include mixins/form.pug
 
 block styles
-  mixin featuresStylesheets()
+  +featuresStylesheets()
 
 block tools
-  mixin tools('edit', page.wikiname)
+  +tools('edit', page.wikiname)
 
 block content
 
   #content.edit
-    mixin errors()
-    mixin warning()
+    +errors()
+    +warning()
     h1 Edit page
 
     form(action='#{page.urlForEditPut()}', method='post', class='edit')
@@ -27,13 +27,13 @@ block content
       .form-group
         input.form-control(type='text', name='message', placeholder='Write a small message here explaining this change (optional)')#message.span8
 
-      mixin saveAndCancel()
+      +saveAndCancel()
 
   #preview(tabindex="-1",role="dialog",aria-hidden="true").modal
-    mixin dialogBox("Page preview")
+    +dialogBox("Page preview")
 
   #syntax-reference(tabindex="-1",role="dialog",aria-hidden="true").modal
-    mixin dialogBox("Markdown cheatsheet")
+    +dialogBox("Markdown cheatsheet")
 
 block scripts
-  mixin featuresJavaScripts()
+  +featuresJavaScripts()

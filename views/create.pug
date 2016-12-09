@@ -1,13 +1,13 @@
-extends layout
+extends layout.pug
 
-include mixins/form
+include mixins/form.pug
 
 block styles
-  mixin featuresStylesheets()
+  +featuresStylesheets()
 
 block content
   #content
-    mixin errors()
+    +errors()
     h1 Create a new page
 
     form(action='#{proxyPath}/pages', method='post', class='edit')
@@ -20,13 +20,13 @@ block content
       .form-group
         textarea.form-control(name="content", data-widearea="enable", rows=25)#editor #{coalesce(formData.content, '')}
 
-      mixin saveAndCancel()
+      +saveAndCancel()
 
   #preview(tabindex="-1",role="dialog",aria-hidden="true").modal
-    mixin dialogBox("Page preview")
+    +dialogBox("Page preview")
 
   #syntax-reference(tabindex="-1",role="dialog",aria-hidden="true").modal
-    mixin dialogBox("Markdown cheatsheet")
+    +dialogBox("Markdown cheatsheet")
 
 block scripts
-  mixin featuresJavaScripts()
+  +featuresJavaScripts()
