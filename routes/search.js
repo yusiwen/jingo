@@ -46,7 +46,7 @@ function _getSearch(req, res) {
         if (item.trim() !== "") {
           record = item.split(":");
           res.locals.matches.push({
-            pageName: path.basename(record[0].split(".")[0]),
+            pageName: path.basename(record[0].split(".md")[0]), // cut the markdown extension
             line: record[1] ? ":" + record[1] : "",
             text: record.slice(2).join("")
           });
