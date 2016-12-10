@@ -62,7 +62,8 @@ function _getWiki(req, res) {
       pageNumbers: Array.apply(null, Array(pages.totalPages)).map(function (x, i) {
         return i + 1;
       }),
-      pageCurrent: pages.currentPage
+      pageCurrent: pages.currentPage,
+      total: pages.total
     });
   }).catch(function (ex) {
     console.log(ex);

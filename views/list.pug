@@ -2,7 +2,7 @@ extends layout.pug
 
 block contents
   #content.show
-    h1 Document list – Most recent updates shown first: #{items.length}
+    h1 Document list – Most recent updates shown first
     ul.doc-list
       each item in items
         li
@@ -35,3 +35,5 @@ block contents
       each pageNumber in pageNumbers
         li(class=pageNumber == pageCurrent ? 'current' : '')
           a(href="?page=" + pageNumber) #{pageNumber}
+
+    p(style="text-align:right;") Total pages: #{total}
