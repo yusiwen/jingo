@@ -50,7 +50,7 @@ if (!config.validate()) {
   process.exit(-1);
 }
 
-var refspec = config.get("application").remote.split(/\s+/);
+var refspec = config.get("application").remote.split(/\//);
 
 Git.setup(config.get("application").git,
           config.get("application").repository,
@@ -102,11 +102,12 @@ function start() {
       res.end();
     }
   }).listen(config.get("server").triggerPort, "127.0.0.1", function () {
-    console.log((new Date()) + "Listen on port %s locally for git pull trigger", config.get("server").triggerPort);
+    console.log((new Date()) + " - Listen on port %s locally for git pull trigger", config.get("server").triggerPort);
   });
 
   if (config.get("application").pushInterval && refspec.length > 0) {
     setInterval(function () {
+      console.log((new Date()) + " - Polling to git repo starting...");
       Git.pull(function (err) {
         if (err) {
           console.log("Error: " + err);
@@ -116,9 +117,11 @@ function start() {
             if (err) {
               console.log("Error: " + err);
             }
+            console.log((new Date()) + " - Polling to git stop");
           });
         }
       });
     }, config.get("application").pushInterval * 1000);
+    console.log((new Date()) + " - Set polling to git repo every %s seconds", config.get("application").pushInterval);
   }
 }
