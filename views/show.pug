@@ -5,8 +5,7 @@ include mixins/form.pug
 block tools
   +tools('show', page.wikiname)
 
-block content
-
+block contents
   if !isAjax
     #content.show
       +notice()
@@ -16,10 +15,10 @@ block content
     .jingo-content.jingo-show
       !=content
 
-  p(class="#{isAjax ? 'jingo-footer' : 'footer'}") Updated by&nbsp;
+  p(class=isAjax ? 'jingo-footer' : 'footer') Updated by&nbsp;
     if page.metadata.email && page.metadata.email != 'jingouser'
       img(src=gravatar().url("#{page.metadata.email}", {s:16}))
     b  #{page.metadata.author}
     |,&nbsp;
-    b(title="#{page.metadata.date}") #{page.metadata.relDate}&nbsp;
+    b(title=page.metadata.date) #{page.metadata.relDate}&nbsp;
     | &ndash; #{page.metadata.hash}
