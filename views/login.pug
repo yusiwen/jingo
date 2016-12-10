@@ -3,7 +3,7 @@ extends layout.pug
 include mixins/form.pug
 include mixins/links.pug
 
-block content
+block contents
 
   #content
 
@@ -28,7 +28,7 @@ block content
 
       +errors()
 
-      form.form-horizontal(action='#{proxyPath}/auth/ldap', method='post')
+      form.form-horizontal(action=proxyPath + '/auth/ldap', method='post')
 
         .form-group
           label.col-sm-2.control-label Username
@@ -53,7 +53,7 @@ block content
 
       +errors()
 
-      form.form-horizontal(action='#{proxyPath}/login', method='post')
+      form.form-horizontal(action=proxyPath + '/login', method='post')
 
         .form-group
           label.col-sm-2.control-label Username
