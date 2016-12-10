@@ -44,7 +44,7 @@ include mixins/links.pug
       .tools
         block tools
 
-      .container
+      .container-fluid(style="margin-left:20px;margin-right:20px")
 
         .row
           if hasSidebar()
@@ -53,13 +53,13 @@ include mixins/links.pug
           else
             .col-md-2
 
-          #main.hide-tools.col-md-8
+          #main.hide-tools.col-md-10
             block contents
 
         if hasFooter()
           .row
             .col-md-2
-            .col-md-8.with-footer
+            .col-md-10.with-footer
               .content !{_footer}
 
       script(src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
