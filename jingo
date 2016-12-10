@@ -105,7 +105,7 @@ function start() {
     console.log((new Date()) + " - Listen on port %s locally for git pull trigger", config.get("server").triggerPort);
   });
 
-  if (config.get("application").pushInterval && refspec.length > 0) {
+  if (config.get("application").polling && config.get("application").pushInterval && refspec.length > 0) {
     setInterval(function () {
       console.log((new Date()) + " - Polling to git repo starting...");
       Git.pull(function (err) {
