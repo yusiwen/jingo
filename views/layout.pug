@@ -47,11 +47,12 @@ include mixins/links.pug
       .container-fluid(style="margin-left:20px;margin-right:20px")
 
         .row
-          if hasSidebar()
-            .col-md-2.with-sidebar
-              .content !{_sidebar}
-          else
-            .col-md-2
+          block sidebar
+            if hasSidebar()
+              .col-md-2.with-sidebar
+                .content !{_sidebar}
+            else
+              .col-md-2
 
           #main.hide-tools.col-md-10
             block contents
