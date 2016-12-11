@@ -628,6 +628,35 @@ a.btn-auth:hover {
   opacity: .9;
 }
 
+span.toc-anchor-symbol {
+  font-size: 10px;
+  text-align: center;
+  color: lightgray;
+}
+
+.table-of-content {
+  border: 1px solid #aaa;
+  padding: 1.5em;
+  display: inline-block;
+}
+
+/* Adding 'Contents' headline to the TOC */
+ul.table-of-content::before {
+  content: "Contents";
+  font-weight: bold;
+}
+
+/* Using numbers instead of bullets for listing */
+.table-of-content ul {
+  list-style: decimal;
+}
+
+.table-of-content li {
+  list-style: decimal;
+  padding: 0;
+  margin: 0;
+}
+
 @media (min-width: 768px) {
   body {
     padding-top: 60px;
