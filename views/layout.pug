@@ -9,6 +9,7 @@ include mixins/links.pug
       meta(name="viewport", content="width=device-width, initial-scale=1")
       title= title
       +asset("/vendor/bootstrap/css/bootstrap.min.css")
+      +asset("/vendor/bootstrap-toc/bootstrap-toc.min.css")
       link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Condensed")
       +asset("/css/style.css")
       +asset("/css/ionicons.min.css")
@@ -17,7 +18,7 @@ include mixins/links.pug
       if hasCustomStyle()
         style.
           !{_style}
-    body
+    body(data-spy="scroll" data-target="#toc")
       -var term_ph = (typeof term == "undefined" ? "" : term)
       .navbar.navbar-inverse.navbar-fixed-top
         .container-fluid
@@ -54,19 +55,24 @@ include mixins/links.pug
             else
               .col-md-2
 
-          #main.hide-tools.col-md-10
+          #main.hide-tools.col-md-8
             block contents
+
+          .col-md-2
+            nav(id="toc" data-spy="affix" data-toggle="toc")
 
         if hasFooter()
           .row
             .col-md-2
-            .col-md-10.with-footer
+            .col-md-8.with-footer
               .content !{_footer}
+            .col-md-2
 
       script(src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
       script.
         window.jQuery || document.write("<sc" + "ript src='#{proxyPath}/vendor/jquery.min.js'></scr" + "ipt>");
       +asset("/vendor/bootstrap/js/bootstrap.min.js")
+      +asset("/vendor/bootstrap-toc/bootstrap-toc.min.js")
       +asset("/js/app.js")
       script.
         Jingo.init("#{proxyPath}");
