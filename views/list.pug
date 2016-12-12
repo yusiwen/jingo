@@ -2,11 +2,11 @@ extends layout.pug
 
 block contents
   #content.show
-    h1 Document list – Most recent updates shown first
+    h1(data-toc-skip) Document list – Most recent updates shown first
     ul.doc-list
       each item in items
         li
-          h4
+          h4(data-toc-skip)
             a(href=item.page.urlForShow()) #{item.page.title}
           div.content.clearfix
             .meta
