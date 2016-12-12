@@ -18,7 +18,7 @@ block contents
               button.btn.btn-primary(type="submit") Search
 
       if (term)
-        h2 #{title} for:&nbsp;
+        h2(data-toc-skip) #{title} for:&nbsp;
           b.page-param '#{term}'&nbsp;&nbsp;(#{matches.length} results)
 
       dl.search-results
