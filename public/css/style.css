@@ -149,6 +149,11 @@ h3 {
   margin: 0 0 10px 0;
 }
 
+h2, h3, h4, h5 {
+  padding-top: 60px;
+  margin-top: -60px;
+}
+
 h1 a, h1 a:hover,
 h2 a, h2 a:hover,
 h3 a, h3 a:hover,
@@ -635,34 +640,10 @@ a.btn-auth:hover {
   opacity: .9;
 }
 
-span.toc-anchor-symbol {
-  font-size: 10px;
+a.header-anchor {
+  font-size: 8px;
   text-align: center;
   color: lightgray;
-}
-
-.table-of-content {
-  border: 1px solid #aaa;
-  padding: 1.5em;
-  display: inline-block;
-  font-size: 13px;
-}
-
-/* Adding 'Contents' headline to the TOC */
-ul.table-of-content::before {
-  content: "Contents";
-  font-weight: bold;
-}
-
-/* Using numbers instead of bullets for listing */
-.table-of-content ul {
-  list-style: decimal;
-}
-
-.table-of-content li {
-  list-style: decimal;
-  padding: 0;
-  margin: 0;
 }
 
 nav#toc {
