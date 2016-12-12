@@ -46,6 +46,11 @@ p.user {
   overflow: hidden;
 }
 
+#content.show {
+  font-family: Palatino, "Palatino Linotype", Georgia, Times, "Times New Roman", "Microsoft YaHei", SimHei, STHeiti, serif;
+  font-size: 15px;
+}
+
 #content img {
   display: block;
   max-width: 100%;
@@ -53,7 +58,7 @@ p.user {
 }
 
 #content.show li {
-  line-height: 1.92;
+  line-height: 1.5;
 }
 
 #content.show ul >li:first-child {
@@ -105,7 +110,7 @@ label {
 
 p {
   margin-bottom: 20px;
-  line-height: 1.92;
+  line-height: 1.5;
 }
 
 hr {
@@ -124,7 +129,7 @@ dl.search-results dt {
 h2,
 h1 {
   border-bottom: 1px solid #ddd;
-  font-family:"Ubuntu Condensed";
+  font-family: "Ubuntu Condensed";
   margin: 0 0 20px 0;
 }
 
@@ -295,12 +300,15 @@ hr {
 }
 
 code {
-  white-space: auto;
   color: #555;
-  border-radius: 0;
   white-space: nowrap;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
+  border-radius: 3px;
+  font-size: 85%;
+  display: inline-block !important;
+  max-width: 100% !important;
+  font-family: "Menlo",Consolas,"Liberation Mono",Menlo,Courier,monospace !important;
 }
 
 code.md-code {
@@ -638,6 +646,7 @@ span.toc-anchor-symbol {
   border: 1px solid #aaa;
   padding: 1.5em;
   display: inline-block;
+  font-size: 13px;
 }
 
 /* Adding 'Contents' headline to the TOC */
@@ -655,6 +664,10 @@ ul.table-of-content::before {
   list-style: decimal;
   padding: 0;
   margin: 0;
+}
+
+nav#toc {
+  font-family: "Ubuntu Condensed";
 }
 
 @media (min-width: 768px) {
