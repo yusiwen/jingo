@@ -658,6 +658,35 @@ nav#toc {
   font-family: "Ubuntu Condensed";
 }
 
+div.note {
+  background: #fff4cc;
+  border-color: #ffe070;
+  border-left-width: 5px;
+  border-left-style: solid;
+  padding: 10px;
+  padding-left: 30px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  clear: none;
+  font-size: 16px;
+}
+
+div.note:before {
+  content: '\f016';
+  width: 30px;
+  float: left;
+  margin: 0 0 -5px -30px;
+  font-family: FontAwesome;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+}
+
+div.note p {
+  margin-bottom: 0;
+}
+
 @media (min-width: 768px) {
   body {
     padding-top: 60px;
