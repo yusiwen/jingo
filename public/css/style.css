@@ -12,7 +12,7 @@ body {
 
 a[href^="https://"],
 a[href^="http://"] {
-  padding-right: 13px;
+  padding-right: 0px;
 }
 
 a[href^="https://"]:before,
