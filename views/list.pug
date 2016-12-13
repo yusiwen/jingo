@@ -12,7 +12,7 @@ block contents
             .meta
               |Last update by&nbsp;
               if item.page.metadata.email && item.page.metadata.email != 'jingouser'
-                img(src=gravatar().url("#{item.page.metadata.email}", {s:16}))
+                img(src=gravatar().url(item.page.metadata.email, {s:16}))
               b &nbsp;#{item.page.metadata.author},&nbsp;
               b.date(title=item.page.metadata.date) #{item.page.metadata.relDate}
               |&nbsp;&ndash;&nbsp;#{item.page.metadata.hash}
