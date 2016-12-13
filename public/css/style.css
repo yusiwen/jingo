@@ -683,7 +683,7 @@ div.note:before {
   text-align: center;
 }
 
-div.note p {
+div.note > :last-child {
   margin-bottom: 0;
 }
 
