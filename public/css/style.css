@@ -12,8 +12,18 @@ body {
 
 a[href^="https://"],
 a[href^="http://"] {
-  background: url(../img/ext.png) center right no-repeat;
   padding-right: 13px;
+}
+
+a[href^="https://"]:before,
+a[href^="http://"]:before {
+  content: '\f08e';
+  font-family: FontAwesome;
+  font-size: 9px;
+  font-size: .643rem;
+  display: inline-block;
+  opacity: .5;
+  margin-right: 3px;
 }
 
 a.logout i {
