@@ -697,6 +697,26 @@ div.note > :last-child {
   margin-bottom: 0;
 }
 
+span.arrow {
+  background-color: #fafbfc;
+  padding-right: 5px;
+  margin-left:5px;
+  border-left: 5px solid #558abb;
+}
+
+span.arrow:before {
+  color: #558abb;
+  content: '\f137';
+  font-family: FontAwesome;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+  padding-right: 5px;
+  padding-left: 5px;
+  
+}
+
 @media (min-width: 768px) {
   body {
     padding-top: 60px;
