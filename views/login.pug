@@ -10,7 +10,7 @@ block contents
 
   #content
 
-    h2 Choose your authentication method
+    h2(data-toc-skip) Choose your authentication method
 
     if (auth.google.enabled)
       p
@@ -27,7 +27,7 @@ block contents
     if (auth.ldap.enabled)
 
       p
-        h4 Authenticate ldap
+        h4(data-toc-skip) Authenticate ldap
 
       +errors()
 
@@ -52,7 +52,7 @@ block contents
     if (auth.alone.enabled || auth.local.enabled)
 
       p
-        h4 Authenticate locally
+        h4(data-toc-skip) Authenticate locally
 
       +errors()
 
