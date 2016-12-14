@@ -24,6 +24,11 @@ include mixins/links.pug
       .navbar.navbar-inverse.navbar-fixed-top
         .container-fluid
           .navbar-header
+
+            if hasSidebar()
+              a(class="navbar-brand" href="#menu-toggle" id="menu-toggle")
+                span(class="glyphicon glyphicon-list" aria-hidden="true")
+            
             +anchor("/", appTitle).navbar-brand
             if canSearch()
               form(action=proxyPath + "/search").navbar-form.search.navbar-left
@@ -46,28 +51,27 @@ include mixins/links.pug
       .tools
         block tools
 
-      .container-fluid(style="margin-left:20px;margin-right:20px")
-
-        .row
+      #wrapper
+        .container-fluid
           block sidebar
             if hasSidebar()
-              .col-md-2.with-sidebar
-                .content !{_sidebar}
-            else
-              .col-md-2
+              #sidebar-wrapper.content 
+                .sidebar-content !{_sidebar}
+      
+          #page-content-wrapper
+            .container-fluid(style="margin-left:20px;margin-right:20px")
+              .row
+                #main.hide-tools.col-md-10
+                  block contents
 
-          #main.hide-tools.col-md-8
-            block contents
+                .col-md-2
+                  nav(id="toc" data-spy="affix" data-toggle="toc")
 
-          .col-md-2
-            nav(id="toc" data-spy="affix" data-toggle="toc")
-
-        if hasFooter()
-          .row
-            .col-md-2
-            .col-md-8.with-footer
-              .content !{_footer}
-            .col-md-2
+              if hasFooter()
+                .row
+                  .col-md-10.with-footer
+                    .content !{_footer}
+                  .col-md-2
 
       script(src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
       script.
@@ -77,9 +81,20 @@ include mixins/links.pug
       +asset("/js/app.js")
       script.
         Jingo.init("#{proxyPath}");
+      if hasSidebar()
+        script.
+          $(document).ready(function(){
+            $("#menu-toggle").click(function(e) {
+              e.preventDefault();
+              $("#wrapper").toggleClass("toggled");
+            });
+          });
+
       block scripts
+        
       if hasCustomScript()
         script.
           !{_script}
+      
 - else
   block content
