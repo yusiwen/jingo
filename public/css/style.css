@@ -690,6 +690,7 @@ div.note:before {
   font-style: normal;
   font-weight: 400;
   text-align: center;
+  padding-top: 2px;
 }
 
 div.note > :last-child {

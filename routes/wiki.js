@@ -5,6 +5,7 @@ var renderer = require("../lib/renderer");
 var models = require("../lib/models");
 var corsEnabler = require("../lib/cors-enabler");
 var app = require("../lib/app").getInstance();
+var components = require("../lib/components");
 
 var proxyPath = app.locals.config.getProxyPath();
 
@@ -214,7 +215,28 @@ function _getCompare(req, res) {
 }
 
 function _getIndex(req, res) {
-  res.redirect(proxyPath + "/wiki/" + app.locals.config.get("pages").index);
+  if (!components.hasIndex()) {
+    res.render("welcome", {
+      title: "Welcome to " + app.locals.config.get("application").title
+    });
+  }
+  else {
+    components.indexAsync().then(function (data) {
+      res.locals.canEdit = false;
+      res.locals.notice = req.session.notice;
+      delete req.session.notice;
+
+      res.render("show", {
+        page: null,
+        title: "Index",
+        content: data
+      });
+    }, function (error) {
+      res.render("welcome", {
+        title: "Welcome to " + app.locals.config.get("application").title
+      });
+    });
+  }
 }
 
 module.exports = router;

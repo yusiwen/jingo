@@ -10,6 +10,7 @@
 var program = require("commander");
 var tools = require("./lib/tools");
 var config = require("./lib/config");
+
 var http = require("http");
 var fs = require("fs");
 var os = require("os");
@@ -17,6 +18,8 @@ var semver = require("semver");
 var pkg = require("./package");
 
 global.Git = require("./lib/gitmech");
+
+var components = require("./lib/components");
 
 program.version(pkg.version)
        .option("-c, --config <path>", "Specify the config file")
@@ -97,6 +100,13 @@ function start() {
         }
         else {
           console.log((new Date()) + " - Git pull success");
+          components.generateAsync().then(function () {
+            console.log("Generate files success");
+          }).catch(function (err) {
+            console.log("Generate files catch exception: " + err);
+          }).error(function (err) {
+            console.log("Generate files error: " + err);
+          });
         }
       });
       res.end();

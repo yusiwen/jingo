@@ -15,14 +15,14 @@ mixin tools(action, pageName)
         li
           +anchor("/pages/new")(title="Create new page").btn.btn-sm.btn-default
             i.icon.ion-plus-round
-      if !isAnonymous() && canEdit
+      if !isAnonymous() && canEdit && pageName
         li
           +anchor("/pages/" + pageName + "/edit")(title="Edit this page").btn.btn-sm.btn-default
             i.icon.ion-compose
-
-      li
-        +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-sm.btn-default
-          i.icon.ion-clock
+      if pageName
+        li
+          +anchor("/wiki/" + pageName + "/history")(title="Page history").btn.btn-sm.btn-default
+            i.icon.ion-clock
       li
         +anchor("/wiki")(title="All pages").btn.btn-sm.btn-default
           i.icon.ion-grid
