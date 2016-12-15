@@ -215,22 +215,28 @@ function _getCompare(req, res) {
 }
 
 function _getIndex(req, res) {
-  // res.redirect(proxyPath + "/wiki/" + app.locals.config.get("pages").index);
-  components.indexAsync().then(function (data) {
-    res.locals.canEdit = false;
-    res.locals.notice = req.session.notice;
-    delete req.session.notice;
-
-    res.render("show", {
-      page: null,
-      title: "Index",
-      content: data
-    });
-  }, function (error) {
+  if (!components.hasIndex()) {
     res.render("welcome", {
       title: "Welcome to " + app.locals.config.get("application").title
     });
-  });
+  }
+  else {
+    components.indexAsync().then(function (data) {
+      res.locals.canEdit = false;
+      res.locals.notice = req.session.notice;
+      delete req.session.notice;
+
+      res.render("show", {
+        page: null,
+        title: "Index",
+        content: data
+      });
+    }, function (error) {
+      res.render("welcome", {
+        title: "Welcome to " + app.locals.config.get("application").title
+      });
+    });
+  }
 }
 
 module.exports = router;
