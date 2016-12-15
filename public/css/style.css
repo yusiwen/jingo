@@ -21,7 +21,6 @@ a[href^="http://"]:before {
   font-family: FontAwesome;
   font-size: 9px;
   font-size: .643rem;
-  display: inline-block;
   opacity: .5;
   margin-right: 3px;
 }
