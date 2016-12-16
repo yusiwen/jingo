@@ -76,6 +76,7 @@ function _getWikiPage(req, res) {
   // Check if page is one of components, if true, redirect to all pages.
   // components are files in git repo folder but not in HEAD, they can't be treated like pages
   if (components.isComponent(req.params.page)) {
+    console.log((new Date()) + "- Access component files, redirected");
     res.redirect(proxyPath + "/");
     return;
   }
