@@ -72,6 +72,14 @@ function _getWiki(req, res) {
 }
 
 function _getWikiPage(req, res) {
+
+  // Check if page is one of components, if true, redirect to all pages.
+  // components are files in git repo folder but not in HEAD, they can't be treated like pages
+  if (components.isComponent(req.params.page)) {
+    res.redirect(proxyPath + "/");
+    return;
+  }
+
   var page = new models.Page(req.params.page, req.params.version);
 
   page.fetch().then(function () {
@@ -92,28 +100,10 @@ function _getWikiPage(req, res) {
       });
     }
     else {
-      if (req.user) {
-        // Try sorting out redirect loops with case insentive fs
-        // Path 'xxxxx.md' exists on disk, but not in 'HEAD'.
-        if (/but not in 'HEAD'/.test(page.error)) {
-          page.setNames(page.name.slice(0, 1).toUpperCase() + page.name.slice(1));
-        }
-        res.redirect(page.urlFor("new"));
-      }
-      else {
-        // Special case for the index page, anonymous user and an empty docbase
-        if (page.isIndex()) {
-          res.render("welcome", {
-            title: "Welcome to " + app.locals.config.get("application").title
-          });
-        }
-        else {
-          res.locals.title = "404 - Not found";
-          res.statusCode = 404;
-          res.render("404.pug");
-          return;
-        }
-      }
+      res.locals.title = "404 - Not found";
+      res.statusCode = 404;
+      res.render("404.pug");
+      return;     
     }
   });
 }
