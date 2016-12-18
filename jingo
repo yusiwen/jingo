@@ -19,8 +19,6 @@ var pkg = require("./package");
 
 global.Git = require("./lib/gitmech");
 
-var components = require("./lib/components");
-
 program.version(pkg.version)
        .option("-c, --config <path>", "Specify the config file")
        .option("-#, --hash-string <string>", "Create an hash for a string")
