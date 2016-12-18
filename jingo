@@ -91,30 +91,6 @@ function start() {
     console.log((new Date()) + " - Jingo%sserver v%s listening on port %s", config.get("server").localOnly ? " (local) " : " ", program.version(), config.get("server").port);
   });
 
-  http.createServer(function (req, res) {
-    if (req.url == "/api/git-pull") {
-      console.log((new Date()) + " - Trigger git pull...");
-      Git.pull(function (err) {
-        if (err) {
-          console.log((new Date()) + " - Git pull error: " + err);
-        }
-        else {
-          console.log((new Date()) + " - Git pull success");
-          components.generateAsync().then(function () {
-            console.log("Generate files success");
-          }).catch(function (err) {
-            console.log("Generate files catch exception: " + err);
-          }).error(function (err) {
-            console.log("Generate files error: " + err);
-          });
-        }
-      });
-      res.end();
-    }
-  }).listen(config.get("server").triggerPort, "127.0.0.1", function () {
-    console.log((new Date()) + " - Listen on port %s locally for git pull trigger", config.get("server").triggerPort);
-  });
-
   if (config.get("application").polling && config.get("application").pushInterval && refspec.length > 0) {
     setInterval(function () {
       console.log((new Date()) + " - Polling to git repo starting...");

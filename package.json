@@ -62,6 +62,7 @@
     "passport-github": "^0.1.5",
     "passport-google-oauth": "^0.1.5",
     "passport-local": "^1.0.0",
+    "passport-http": "^0.3.0",
     "semver": "^2.3.2",
     "serve-favicon": "^2.1.7",
     "transliteration": "^0.1.1"
