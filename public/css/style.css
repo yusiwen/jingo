@@ -324,6 +324,7 @@ code {
   display: inline-block !important;
   max-width: 100% !important;
   font-family: "Menlo",Consolas,"Liberation Mono",Menlo,Courier,monospace !important;
+  text-indent: 0;
 }
 
 code.md-code {
