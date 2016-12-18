@@ -102,26 +102,6 @@ if (auth.ldap.enabled) {
   ));
 }
 
-if (auth.alone.enabled) {
-  passport.use(new passportLocal.Strategy(
-
-    function (username, password, done) {
-      var user = {
-        displayName: auth.alone.username,
-        email: auth.alone.email || ""
-      };
-
-      if (username.toLowerCase() !== auth.alone.username.toLowerCase() || tools.hashify(password) !== auth.alone.passwordHash) {
-        return done(null, false, { message: "Incorrect username or password" });
-      }
-
-      usedAuthentication("alone");
-
-      return done(null, user);
-    }
-  ));
-}
-
 if (auth.local.enabled) {
   passport.use(new passportLocal.Strategy(
 
@@ -200,8 +180,7 @@ function _getAuthDone(req, res) {
     return;
   }
 
-  if (!auth.alone.used &&
-      !auth.local.used &&
+  if (!auth.local.used &&
       !tools.isAuthorized(res.locals.user.email,
                           app.locals.config.get("authorization").validMatches,
                           app.locals.config.get("authorization").emptyEmailMatches)) {
