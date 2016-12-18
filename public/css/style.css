@@ -325,6 +325,7 @@ code {
   max-width: 100% !important;
   font-family: "Menlo",Consolas,"Liberation Mono",Menlo,Courier,monospace !important;
   text-indent: 0;
+  padding: 0px 4px;
 }
 
 code.md-code {
@@ -699,14 +700,16 @@ div.note > :last-child {
 }
 
 span.arrow {
-  background-color: #fafbfc;
+  background-color: #e6f1f6;
   padding-right: 5px;
   margin-left:5px;
-  border-left: 5px solid #558abb;
+  border-left: 5px solid #b0d5e6;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 span.arrow:before {
-  color: #558abb;
+  color: #b0d5e6;
   content: '\f137';
   font-family: FontAwesome;
   font-size: 14px;
