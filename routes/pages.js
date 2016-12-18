@@ -50,8 +50,8 @@ function _getPagesNew(req, res) {
   var page;
   var title = "";
 
-  if (req.params.page) {
-    // This is not perfect, unfortunately
+  if (req.params.page && !req.session.errors) {
+    // If there is no error and page title is not null, check page existence
     title = namer.unwikify(req.params.page);
     page = new models.Page(title);
     if (page.exists()) {
@@ -73,8 +73,7 @@ function _getPagesNew(req, res) {
 }
 
 function _postPages(req, res) {
-  var errors,
-    pageName;
+  var errors, pageName;
 
   if (pagesConfig.title.fromFilename) {
     // pageName (from url) is not considered
@@ -110,7 +109,10 @@ function _postPages(req, res) {
 
   if (page.exists()) {
     req.session.errors = [{msg: "A document with this title already exists"}];
-    res.redirect(page.urlFor("new"));
+    req.session.formData = {
+      pageTitle: req.body.pageTitle
+    };
+    res.redirect(page.urlForNewWithError());
     return;
   }
 
@@ -133,8 +135,7 @@ function _postPages(req, res) {
 }
 
 function _putPages(req, res) {
-  var errors,
-    page;
+  var errors, page;
 
   page = new models.Page(req.params.page);
 
