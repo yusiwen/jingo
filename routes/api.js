@@ -4,6 +4,8 @@ var _ = require("lodash");
 var passportHTTP = require("passport-http");
 var auth = app.locals.config.get("authentication");
 var tools = require("../lib/tools");
+var pageCache = require("../lib/cache");
+
 
 var passport = app.locals.passport;
 var proxyPath = app.locals.config.getProxyPath();
@@ -59,11 +61,12 @@ function _doGitPull() {
     else {
       console.log((new Date()) + " - Git pull success");
       components.generateAsync().then(function () {
-        console.log("Generate files success");
+        pageCache.cache.reset();
+        console.log((new Date()) + " - Generate files success, reset cache...");
       }).catch(function (err) {
-        console.log("Generate files catch exception: " + err);
+        console.log((new Date()) + " - Generate files catch exception: " + err);
       }).error(function (err) {
-        console.log("Generate files error: " + err);
+        console.log((new Date()) + " - Generate files error: " + err);
       });
     }
   });

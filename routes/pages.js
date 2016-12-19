@@ -5,6 +5,8 @@ var namer = require("../lib/namer");
 var app = require("../lib/app").getInstance();
 var models = require("../lib/models");
 var components = require("../lib/components");
+var pageCache = require("../lib/cache");
+
 
 models.use(Git);
 
@@ -41,6 +43,8 @@ function _deletePages(req, res) {
       app.locals._sidebar = null;
     }
 
+    pageCache.removeKeys(req.params.page);
+    
     req.session.notice = "The page `" + page.wikiname + "` has been deleted.";
     res.redirect(proxyPath + "/");
   });
@@ -85,6 +89,17 @@ function _postPages(req, res) {
   }
 
   var page = new models.Page(pageName);
+
+  // Check if page is one of components, if true, redirect back with notice
+  if (components.isComponent(pageName)) {
+    console.log((new Date()) + "- Create component files is not allowed");
+    req.session.errors = [{msg: "The component page `" + pageName + "` can't be created. It'll be generated automatically. Please change title."}];
+    req.session.formData = {
+      pageTitle: req.body.pageTitle
+    };
+    res.redirect(page.urlForNewWithError());
+    return;
+  }
 
   req.check("pageTitle", "The page title cannot be empty").notEmpty();
   req.check("content", "The page content cannot be empty").notEmpty();
@@ -167,6 +182,7 @@ function _putPages(req, res) {
   // If the title is from content, we never rename a file and the problem does not exist
   if (app.locals.config.get("pages").title.fromFilename &&
       page.name.toLowerCase() !== req.body.pageTitle.toLowerCase()) {
+    pageCache.removeKeys(page.name);
     page.renameTo(req.body.pageTitle)
           .then(savePage)
           .catch(function (ex) {
@@ -188,12 +204,8 @@ function _putPages(req, res) {
     page.save(req.body.message).then(function () {
       page.unlock();
 
-      if (page.name === "_footer") {
-        components.expire("footer");
-      }
-
-      if (page.name === "_sidebar") {
-        components.expire("sidebar");
+      if (pageCache.cache.has(pageCache.getKey(page.name))) {
+        pageCache.cache.del(pageCache.getKey(page.name)); // Force reload page next time
       }
 
       req.session.notice = "The page has been updated. <a href=\"" + page.urlForEdit() + "\">Edit it again?</a>";
@@ -258,6 +270,14 @@ function _getPagesEdit(req, res) {
       page: page,
       warning: warning
     });
+  }).error(function (err) {
+    res.locals.title = "500 - Internal server error";
+    res.statusCode = 500;
+    console.log(err);
+    res.render("500.pug", {
+      message: "Sorry, something went wrong and I cannot recover. If you think this might be a bug in Jingo, please file a detailed report about what you were doing here: https://github.com/claudioc/jingo/issues . Thank you!",
+      error: err
+    });
   });
 }
 
@@ -269,6 +289,9 @@ function _getRevert(req, res) {
   page.fetch().then(function () {
     if (!page.error) {
       page.revert();
+      
+      pageCache.removeKeys(req.params.page);
+
       res.redirect(page.urlFor("history"));
     }
     else {

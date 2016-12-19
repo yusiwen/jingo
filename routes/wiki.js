@@ -6,6 +6,7 @@ var models = require("../lib/models");
 var corsEnabler = require("../lib/cors-enabler");
 var app = require("../lib/app").getInstance();
 var components = require("../lib/components");
+var pageCache = require("../lib/cache");
 
 var proxyPath = app.locals.config.getProxyPath();
 
@@ -71,42 +72,67 @@ function _getWiki(req, res) {
   });
 }
 
+function showPage(req, res, page) {
+  res.locals.canEdit = true;
+  if (page.revision !== "HEAD" && page.revision !== page.hashes[0]) {
+    res.locals.warning = "You're not reading the latest revision of this page, which is " + "<a href='" + page.urlForShow() + "'>here</a>.";
+    res.locals.canEdit = false;
+  }
+
+  res.locals.notice = req.session.notice;
+  delete req.session.notice;
+
+  res.render("show", {
+    page: page,
+    title: app.locals.config.get("application").title + " – " + page.title,
+    content: renderer.render("# " + page.title + "\n" + page.content)
+  });
+}
+
 function _getWikiPage(req, res) {
 
   // Check if page is one of components, if true, redirect to all pages.
   // components are files in git repo folder but not in HEAD, they can't be treated like pages
   if (components.isComponent(req.params.page)) {
     console.log((new Date()) + "- Access component files, redirected");
+    req.session.notice = "The component page `" + req.params.page + "` can't be accessed.";
     res.redirect(proxyPath + "/");
     return;
   }
 
-  var page = new models.Page(req.params.page, req.params.version);
-
-  page.fetch().then(function () {
-    if (!page.error) {
-      res.locals.canEdit = true;
-      if (page.revision !== "HEAD" && page.revision !== page.hashes[0]) {
-        res.locals.warning = "You're not reading the latest revision of this page, which is " + "<a href='" + page.urlForShow() + "'>here</a>.";
-        res.locals.canEdit = false;
-      }
-
-      res.locals.notice = req.session.notice;
-      delete req.session.notice;
-
-      res.render("show", {
-        page: page,
-        title: app.locals.config.get("application").title + " – " + page.title,
-        content: renderer.render("# " + page.title + "\n" + page.content)
-      });
+  var page = null, name = req.params.page, version = req.params.version;
+  if (pageCache.cache.has(pageCache.getKey(name, version))) {
+    page = pageCache.cache.get(pageCache.getKey(name, version));
+    if (page && page.exists()) {
+      console.log((new Date()) + " - Loading page from cache...");
+      showPage(req, res, page);
     }
     else {
+      pageCache.cache.del(pageCache.getKey(name, version));
       res.locals.title = "404 - Not found";
       res.statusCode = 404;
       res.render("404.pug");
-      return;     
+      return;  
     }
-  });
+  }
+  else {
+    page = new models.Page(name, version);
+
+    page.fetch().then(function () {
+      if (!page.error) {
+        console.log((new Date()) + " - Saving page to cache...");
+        pageCache.cache.set(pageCache.getKey(name, version), page);
+
+        showPage(req, res, page);
+      }
+      else {
+        res.locals.title = "404 - Not found";
+        res.statusCode = 404;
+        res.render("404.pug");
+        return;     
+      }
+    });
+  }
 }
 
 function _getCompare(req, res) {
