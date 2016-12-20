@@ -13,8 +13,8 @@ models.use(Git);
 router.get("/pages/new", _getPagesNew);
 router.get("/pages/new/:page", _getPagesNew);
 router.get("/pages/:page/edit", _getPagesEdit);
-router.post("/pages", _postPages);
-router.put("/pages/:page", _putPages);
+router.post("/pages", _postPages); // For create new page
+router.put("/pages/:page", _putPages); // For update page
 router.delete("/pages/:page", _deletePages);
 router.get("/pages/:page/revert/:version", _getRevert);
 
@@ -33,6 +33,8 @@ function _deletePages(req, res) {
   page.author = req.user.asGitAuthor;
 
   page.remove().then(function () {
+    return components.generateAsync();
+  }).then(function () {
     page.unlock();
 
     if (page.isFooter()) {
@@ -136,6 +138,8 @@ function _postPages(req, res) {
   page.content = req.body.content;
 
   page.save().then(function () {
+    return components.generateAsync();
+  }).then(function () {
     req.session.notice = "The page has been created. <a href=\"" + page.urlForEdit() + "\">Edit it again?</a>";
     res.redirect(page.urlForShow());
   }).catch(function (err) {
@@ -202,6 +206,8 @@ function _putPages(req, res) {
     page.title = req.body.pageTitle;
     page.content = req.body.content;
     page.save(req.body.message).then(function () {
+      return components.generateAsync();
+    }).then(function () {
       page.unlock();
 
       if (pageCache.cache.has(pageCache.getKey(page.name))) {
