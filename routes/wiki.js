@@ -49,24 +49,32 @@ function _getWiki(req, res) {
   var pages = new models.Pages();
 
   pages.fetch(pagen).then(function () {
-    pages.models.forEach(function (page) {
-      if (!page.error) {
-        items.push({
-          page: page,
-          hashes: page.hashes.length === 2 ? page.hashes.join("..") : ""
-        });
-      }
-    });
+    // Check if there is no page created
+    if (pages.models.length == 0) {
+      res.render("welcome", {
+        title: "Welcome to " + app.locals.config.get("application").title
+      });
+    }
+    else { // There are pages created
+      pages.models.forEach(function (page) {
+        if (!page.error) {
+          items.push({
+            page: page,
+            hashes: page.hashes.length === 2 ? page.hashes.join("..") : ""
+          });
+        }
+      });
 
-    res.render("list", {
-      items: items,
-      title: "All the pages",
-      pageNumbers: Array.apply(null, Array(pages.totalPages)).map(function (x, i) {
-        return i + 1;
-      }),
-      pageCurrent: pages.currentPage,
-      total: pages.total
-    });
+      res.render("list", {
+        items: items,
+        title: "All the pages",
+        pageNumbers: Array.apply(null, Array(pages.totalPages)).map(function (x, i) {
+          return i + 1;
+        }),
+        pageCurrent: pages.currentPage,
+        total: pages.total
+      });
+    }
   }).catch(function (ex) {
     console.log(ex);
   });
