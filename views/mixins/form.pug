@@ -38,11 +38,11 @@ mixin tools(action, pageName)
         +anchor("/wiki")(title="All pages").btn.btn-sm.btn-default
           i.icon.ion-grid
 
-mixin saveAndCancel(saveText)
+mixin saveAndCancel(saveText, returnUrl, action)
   .well
-    input(type='submit',value=saveText || 'Save',title='Save (Ctrl/Cmd+s)').btn.btn-primary
+    input(value=saveText || 'Save',title=(saveText || 'Save') + '(Ctrl/Cmd+s)',onClick=(action || 'Jingo.save()'),style='width: 78px !important;').btn.btn-primary
     |&nbsp;
-    +anchor("/", "Cancel").btn
+    +anchor(returnUrl || (proxyPath + "/"), "Cancel").btn
 
 mixin errors(err)
   -var errors = locals.errors;

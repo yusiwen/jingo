@@ -15,10 +15,10 @@ block contents
     +warning()
     h1(data-toc-skip) Edit page
 
-    form(action=page.urlForEditPut(), method='post', class='edit')
+    form(action=page.urlForEditPut(), method='post', class='edit', data-pagename=page.name)
 
       .form-group
-        input.form-control(rquired, type='text', placeholder='Enter the page title', name='pageTitle', value=coalesce(formData.pageTitle, ''))#pageTitle
+        input.form-control(required, type='text', placeholder='Enter the page title', name='pageTitle', value=coalesce(formData.pageTitle, ''))#pageTitle
         input(type="hidden", name="_method", value="put")
 
       .form-group
@@ -27,13 +27,16 @@ block contents
       .form-group
         input.form-control(type='text', name='message', placeholder='Write a small message here explaining this change (optional)')#message.span8
 
-      +saveAndCancel()
+      +saveAndCancel(null, proxyPath + "/wiki/" + page.name)
 
   #preview(tabindex="-1",role="dialog",aria-hidden="true").modal
     +dialogBox("Page preview")
 
   #syntax-reference(tabindex="-1",role="dialog",aria-hidden="true").modal
     +dialogBox("Markdown cheatsheet")
+
+  #message-box(tabindex="-1",role="dialog",aria-hidden="true").modal
+    +dialogBox("Message")
 
 block scripts
   +featuresJavaScripts()

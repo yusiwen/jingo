@@ -186,8 +186,24 @@
       });
     },
 
-    save: function () {
+    create: function () {
       $("form.edit").submit();
+    },
+
+    save: function () {
+      var content = Jingo.cmInstance.getValue();
+      var contentOriginal = $("textarea#editor").prop("defaultValue");
+      var title = $("input#pageTitle").val();
+      var titleOriginal = $("input#pageTitle").prop("defaultValue");
+      if (content === contentOriginal && title === titleOriginal) {
+        $("#message-box").modal({keyboard: true, show: true, backdrop: false});
+        $("#message-box .modal-body").html("<p><b>There is no change!</b></p>");
+        var pageName = $("form.edit").data("pagename"); 
+        $("#message-box .modal-footer").html("<div class='well'><button class='btn btn-primary' data-dismiss='modal'>Continue editing</button>&nbsp;<a class='btn' href='" + (pageName ? (proxyPath + "/wiki/" + pageName) : proxyPath + "/" ) + "'>Cancel</a></div>");
+      }
+      else {
+        $("form.edit").submit();
+      }
     },
 
     toggleFullscreen: function () {
