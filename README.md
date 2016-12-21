@@ -51,7 +51,7 @@ No change.
 
 - [**NEW**] customizations.expired (number: 60)
 
-  How long will customizations files expired in the cache. Default time is 60 minutes.
+  How long will customizations files expired in the cache. Default time is 60 minutes. Now every change to pages will automatically generate index page, and make its cache expired. Git pull trigger also does that.
 
 - [**NEW**] customizations.index (string: "Home.md")
 
