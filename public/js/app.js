@@ -112,6 +112,23 @@
         return false;
       });
 
+      $("nav#toc").on("click", "a", function (event) {
+        if (this.hash !== "") {
+          event.preventDefault();
+
+          var hash = this.hash;
+
+          $("html, body").animate({scrollTop: $(hash).offset().top}, 800, function () {
+            window.location.hash = hash;
+          });
+        }
+      });
+ 
+      $("div.navbar-header").on("click", "#menu-toggle", function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+
       if (/^\/pages\/.*\/edit/.test(window.location.pathname) ||
           /^\/pages\/new/.test(window.location.pathname)) {
         $("#editor").closest("form").on("submit", function () {

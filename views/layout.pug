@@ -24,11 +24,9 @@ include mixins/links.pug
       .navbar.navbar-inverse.navbar-fixed-top
         .container-fluid
           .navbar-header
-
             if hasSidebar()
               a(class="navbar-brand" href="#menu-toggle" id="menu-toggle")
                 span(class="glyphicon glyphicon-list" aria-hidden="true")
-            
             +anchor("/", appTitle).navbar-brand
             if canSearch()
               form(action=proxyPath + "/search").navbar-form.search.navbar-left
@@ -81,20 +79,11 @@ include mixins/links.pug
       +asset("/js/app.js")
       script.
         Jingo.init("#{proxyPath}");
-      if hasSidebar()
-        script.
-          $(document).ready(function(){
-            $("#menu-toggle").click(function(e) {
-              e.preventDefault();
-              $("#wrapper").toggleClass("toggled");
-            });
-          });
 
       block scripts
-        
-      if hasCustomScript()
-        script.
-          !{_script}
+        if hasCustomScript()
+          script.
+            !{_script}
       
 - else
   block content
