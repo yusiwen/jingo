@@ -241,8 +241,15 @@ function _getCompare(req, res) {
 
 function _getIndex(req, res) {
   if (!components.hasIndex()) {
-    res.render("welcome", {
-      title: "Welcome to " + app.locals.config.get("application").title
+    models.repositories.isEmpty(function (err, check) {
+      if (err || check) {
+        res.render("welcome", {
+          title: "Welcome to " + app.locals.config.get("application").title
+        });
+      }
+      else {
+        res.redirect(proxyPath + "/wiki");
+      }
     });
   }
   else {
