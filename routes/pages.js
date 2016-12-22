@@ -24,7 +24,7 @@ var proxyPath = app.locals.config.getProxyPath();
 function _deletePages(req, res) {
   var page = new models.Page(req.params.page);
 
-  if (page.isIndex() || !page.exists()) {
+  if (components.isComponent(page.name)) {
     req.session.notice = "The page cannot be deleted.";
     res.redirect(proxyPath + "/");
     return;
@@ -33,17 +33,9 @@ function _deletePages(req, res) {
   page.author = req.user.asGitAuthor;
 
   page.remove().then(function () {
-    return components.generateAsync();
+    return components.generateAsync(); // Force to re-generate component pages
   }).then(function () {
     page.unlock();
-
-    if (page.isFooter()) {
-      app.locals._footer = null;
-    }
-
-    if (page.isSidebar()) {
-      app.locals._sidebar = null;
-    }
 
     pageCache.removeKeys(req.params.page);
     
