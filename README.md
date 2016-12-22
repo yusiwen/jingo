@@ -26,6 +26,11 @@ This is my fork of [claudioc](https://github.com/claudioc)'s [original Jingo](ht
 - Remove [Gollum](https://github.com/gollum/gollum)'s directives format support for cross-reference links. 
 - Customizations: index page and sidebar page can't be editted, they are generated automatically according the markdown files in the repository. If no index page and sidebar page is assigned, user will be redirected to welcome page or list page.
 - Some layout adjustments.
+  - Toggle sidebar, if `customizations.sidebar` is assigned.
+  - Add page meta data about creation date and user at the footer.
+  - Redirect more system errors to 500 page
+  - Check if there no change to the file when submit editting on the client side, avoiding git commit error.
+  - Adjust text font to 'Palatino Linotype'.
   
 ## Installation
 
