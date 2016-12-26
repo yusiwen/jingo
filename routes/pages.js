@@ -178,7 +178,7 @@ function _putPages(req, res) {
   // If the title is from content, we never rename a file and the problem does not exist
   if (app.locals.config.get("pages").title.fromFilename &&
       page.name.toLowerCase() !== req.body.pageTitle.toLowerCase()) {
-    pageCache.removeKeys(page.name);
+    pageCache.removeKeys(req.params.page);
     page.renameTo(req.body.pageTitle)
           .then(savePage)
           .catch(function (ex) {
@@ -191,6 +191,7 @@ function _putPages(req, res) {
           });
   }
   else {
+    pageCache.removeKeys(req.params.page);
     savePage();
   }
 
